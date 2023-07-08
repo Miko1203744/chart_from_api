@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Pie Chart</title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <style>
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    color: black;
+    }
+    
+    table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    }
+    
+    table th {
+    background-color: #f2f2f2;
+    }
+    </style>
+    
+</head>
+<body>
+  <div id="chart-container" style="width: 400px; height: 300px;"></div>
+  <div id="container"></div>
+  <div id="containers"></div>
+  <h1>adiss abeba weather in table</h1>
+
+<table >
+<tr>
+<th>City</th>
+<th>Temperature</th>
+<th>Description</th>
+<th>Humidity</th>
+<th>Wind Speed</th>
+</th>
+<tr>
+<td id="city"></td>
+<td id="temperature"></td>
+<td id="description"></td>
+<td id="humidity"></td>
+<td id="wind-speed"></td>
+</tr>
+</table>
+
+
+  <script>
+    // Make an API request to OpenWeatherMap API
+    const apiKey = 'a68e17eaf150f37f13ef21a47475d61f';
+    const cityname = 'addis abeba'; // Replace with the actual city ID or name
+
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${apiKey}`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        // Extract necessary weather data for the pie chart
+        const weather = data.weather[0];
+        console.log(weather)
+
+        // Build the pie chart data array
+        const chartData = [{
+          name: 'Clear',
+          y: 0
+        }, {
+          name: 'Clouds',
+          y: 0
+        }, {
+          name: 'Rain',
+          y: 0
+        }, {
+          name: 'Other',
+          y: 0
+        }];
+
+        // Determine the weather condition and update the chart data
+        if (weather.main === 'Clear') {
+          chartData[0].y = 1;
+        } else if (weather.main === 'Clouds') {
+          chartData[1].y = 1;
+        } else if (weather.main === 'Rain') {
+          chartData[2].y = 1;
+        } else {
+          chartData[3].y = 1;
+        }
+
+        // Create the pie chart
+        Highcharts.chart('chart-container', {
+          chart: {
+            type: 'pie'
+          },
+          title: {
+            text: 'Weather Conditions in addis abeba'
+          },
+          series: [{
+            name: 'Weather',
+            data: chartData
+          }]
+        });
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
+  </script>
+
+<script>
+// Fetch data from OpenWeather API
+fetch('https://api.openweathermap.org/data/2.5/forecast?q=addis abeba&appid=a68e17eaf150f37f13ef21a47475d61f&units=metric')
+.then(response => response.json())
+.then(data => {
+const chartData = [];
+
+// Extract necessary data for the chart
+data.list.forEach(weatherData => {
+const date = weatherData.dt_txt.split(' ')[0];
+const temperature = weatherData.main.temp;
+
+chartData.push([date, temperature]);
+});
+
+// Create the bar chart using Highcharts
+Highcharts.chart('container', {
+chart: {
+type: 'column'
+},
+title: {
+text: 'Weather forcast in addiss abeba for next 6 days'
+},
+xAxis: {
+type: 'category',
+title: {
+text: 'Date'
+}
+},
+yAxis: {
+title: {
+text: 'Temperature (°C)'
+}
+},
+legend: {
+enabled: false
+},
+series: [{
+name: 'Temperature',
+data: chartData
+}]
+});
+})
+.catch(error => {
+console.log('Error:', error);
+});
+</script>
+
+  <script>
+    // Replace 'YOUR_API_KEY' with your actual OpenWeather API key
+    const city = 'addis abeba'; // Replace with the desired city
+    
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+    document.getElementById('city').textContent = data.name;
+    document.getElementById('temperature').textContent = `${data.main.temp}°C`;
+    document.getElementById('description').textContent = data.weather[0].description;
+    document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+    document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
+    })
+    .catch(error => {
+    console.error('Error:', error);
+    });
+    </script>
+</body>
+</html>
