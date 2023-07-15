@@ -24,11 +24,14 @@
     
 </head>
 <body>
+  <div>
   <div id="chart-container" style="width: 400px; height: 300px;"></div>
+  <h1 class="j"></h1>
+   <div><button id="btn">button</button></div>
+</div>
   <div id="container"></div>
   <div id="containers"></div>
   <h1>adiss abeba weather in table</h1>
-
 <table >
 <tr>
 <th>City</th>
@@ -48,12 +51,11 @@
 
 
   <script>
-    // Make an API request to OpenWeatherMap API
     const apiKey = 'a68e17eaf150f37f13ef21a47475d61f';
-    const cityname = 'addis abeba'; // Replace with the actual city ID or name
-
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${apiKey}`;
-
+  
+   let cityname='addis abeba'
+  function wheather(x){
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${x},ET&appid=${apiKey}`;
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
@@ -93,7 +95,7 @@
             type: 'pie'
           },
           title: {
-            text: 'Weather Conditions in addis abeba'
+            text: 'Weather Conditions in ethiopia region'
           },
           series: [{
             name: 'Weather',
@@ -104,6 +106,24 @@
       .catch(error => {
         console.log('Error:', error);
       });
+    }
+    wheather(cityname)
+    const btn=document.getElementById('btn')
+    btn.addEventListener('click',name)
+
+      var i=0;
+    function name(){
+      const newcities = ['addis abeba','Gonder','oromiya','Gambela','amhara','Tigray']
+      const add=document.querySelector('.j')
+      add.textContent= `region ${newcities[i]}`
+      wheather(newcities[i]);
+      console.log(newcities[i])
+      i++;
+      if(i==newcities.length){
+        i=0;
+
+      }
+    }
   </script>
 
 <script>
